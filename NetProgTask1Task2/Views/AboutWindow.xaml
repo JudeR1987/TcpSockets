@@ -1,0 +1,112 @@
+﻿<Window x:Class="NetProgTask1Task2.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetProgTask1Task2.Views"
+        mc:Ignorable="d"
+        
+        Title="Сведения о приложении и разработчике"
+        SizeToContent="Height"
+        Width="700"
+        FontFamily="Tahoma"
+        FontSize="16"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/network.png"
+        ShowInTaskbar="False"
+        Background="WhiteSmoke"
+        ResizeMode="NoResize">
+
+    <Grid
+        Background="DarkMagenta">
+
+        <StackPanel
+            Orientation="Vertical"
+            Margin="3"
+            Background="Lavender">
+
+            <ScrollViewer
+                Height="350">
+
+                <TextBlock
+                    Margin="10"
+                    Padding="10"
+                    FontFamily="Cascadia Code"
+                    FontSize="13"
+                    ScrollViewer.CanContentScroll="True"
+                    
+                    xml:space="preserve"
+                    
+                    SnapsToDevicePixels="True"
+                    TextWrapping="Wrap"
+                    Background="FloralWhite">
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+        <Bold>Задача 1.</Bold>
+
+    Разработайте WPF приложение (можно в паттерне MVVM) для выполнения
+    следующих действий (выполнять асихронно):
+    •	При помощи WebClient загрузите файл с этой ссылки
+        (это CSS-фреймворк Bootstrap);
+    •	При помощи WebRequest, WebResponse загрузите главную страницу
+        cайта NewtonSoft, определите количество символов &lt; и &gt; на
+        загруженной странице.
+                    
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                    
+        <Bold>Задача 2.</Bold>
+    
+    В приложение по задаче 1 добавьте возможность получения данных о курсах
+    валют с сайта ЦРБ РФ в формате JSON, через API по команде интерфейса.
+    Ссылка на API:  https://www.cbr-xml-daily.ru/daily_json.js.
+    
+    Генерацию классов для представления данных выполняйте тут.
+    
+    Отображать полученные данные в DataGrid. По командам интерфейса
+    пользователя (выполнять асинхронно):
+    •	Найти и отобразить валюты с курсом в заданном диапазоне значений;
+    •	Найти и отобразить курс валюты заданной страны;
+    •	Найти и отобразить курс заданной по наименованию валюты;
+    •	Упорядочить курсы валют по убыванию.
+                    
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</TextBlock>
+
+            </ScrollViewer>
+
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Margin="10">
+
+                <Label
+                    Margin="10"
+                    Padding="10"
+                    BorderBrush="DarkMagenta"
+                    BorderThickness="2"
+                    Background="FloralWhite"
+                    VerticalAlignment="Center">
+                    Студент Макаров Е.С.
+                    Группа ПД221
+                    КА ШАГ, Донецк, 2023г.</Label>
+
+                <Button
+                    Margin="20 10 10 10"
+                    Width="120"
+                    Height="44"
+                    Content="OK"
+                    Background="DarkMagenta"
+                    Foreground="FloralWhite"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    IsDefault="True"
+                    MouseEnter="Button_MouseEnter"
+                    MouseLeave="Button_MouseLeave"
+                    Click="Close_Click"/>
+                
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+    
+</Window>

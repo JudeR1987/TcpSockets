@@ -1,0 +1,1048 @@
+﻿
+<!-- главное окно приложения -->
+
+<!-- Д.З.№2 по NP на 13.10.2023г.
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+        Задача 1.
+    
+    Разработайте WPF приложение (можно в паттерне MVVM) для выполнения
+    следующих действий (выполнять асихронно):
+    •	При помощи WebClient загрузите файл с этой ссылки
+        (это CSS-фреймворк Bootstrap);
+    •	При помощи WebRequest, WebResponse загрузите главную страницу
+        cайта NewtonSoft, определите количество символов < и > на
+        загруженной странице.
+    
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+        Задача 2.
+
+    В приложение по задаче 1 добавьте возможность получения данных о курсах
+    валют с сайта ЦРБ РФ в формате JSON, через API по команде интерфейса.
+    Ссылка на API:  https://www.cbr-xml-daily.ru/daily_json.js .
+    
+    Генерацию классов для представления данных выполняйте тут.
+    
+    Отображать полученные данные в DataGrid. По командам интерфейса
+    пользователя (выполнять асинхронно):
+    •	Найти и отобразить валюты с курсом в заданном диапазоне значений;
+    •	Найти и отобразить курс валюты заданной страны;
+    •	Найти и отобразить курс заданной по наименованию валюты;
+    •	Упорядочить курсы валют по убыванию.
+    
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+
+<Window x:Class="NetProgTask1Task2.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NetProgTask1Task2.Views"
+        mc:Ignorable="d"
+        
+        Title="Д.З.№2 по NP на 13.10.2023г. Макаров Евгений. - Практика сетевого программирования."
+        Icon="/Assets/network.png"
+        Height="700"
+        Width="1150"
+        FontFamily="Tahoma"
+        FontSize="18"
+        WindowStartupLocation="CenterScreen"
+        BorderBrush="DarkMagenta"
+        BorderThickness="2">
+
+    <Grid
+        Background="FloralWhite">
+
+        <Grid.RowDefinitions>
+
+            <!-- меню -->
+            <RowDefinition Height="Auto"/>
+
+            <!-- панель инструментов -->
+            <RowDefinition Height="Auto"/>
+
+            <!-- рабочая область -->
+            <RowDefinition Height="*"/>
+
+            <!-- строка состояния -->
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+
+
+        <!-- region выпадающее меню приложения -->
+        <Menu
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            FontFamily="Tahoma"
+            FontSize="16"
+            Background="DarkMagenta">
+
+            <!-- 1. Кнопка "Файл" -->
+            <MenuItem
+                Header="_Файл"
+                Margin="5 2 0 2"
+                Padding="7 1"
+                Foreground="FloralWhite"
+                Background="Purple"
+                BorderBrush="FloralWhite"
+                BorderThickness="1">
+
+                <!-- выход из приложения -->
+                <MenuItem
+                    Header="_Выход"
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="Exit_Click">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Завершение работы<LineBreak/>
+                            приложения
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/close.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+            </MenuItem>
+
+            <!-- 2. Кнопка "Задача 1" -->
+            <MenuItem
+                Header="Задача _1"
+                Margin="5 2 0 2"
+                Padding="7 1"
+                Foreground="FloralWhite"
+                Background="Purple"
+                BorderBrush="FloralWhite"
+                BorderThickness="1">
+
+                <!-- 1. Обработка по задаче 1 "Скачать файл" -->
+                <MenuItem
+                    Header="_Скачать файл"
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="FileDownload_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Загрузить файл с ресурса:<LineBreak/>
+                            https://github.com/twbs/bootstrap/releases/download/v4.6.1/bootstrap-4.6.1-examples.zip
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/download.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+                <!-- 2. Обработка по задаче 1 "Обработка страницы" -->
+                <MenuItem
+                    Header="_Обработка страницы"
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="PageProcess_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Загрузить главную страницу<LineBreak/>
+                            cайта NewtonSoft и определить<LineBreak/>
+                            количество заданных символов<LineBreak/>
+                            на загруженной странице
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/newtonsoft.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+            </MenuItem>
+
+            <!-- 3. Кнопка "Задача 2" -->
+            <MenuItem
+                Header="Задача _2"
+                Margin="5 2 0 2"
+                Padding="7 1"
+                Foreground="FloralWhite"
+                Background="Purple"
+                BorderBrush="FloralWhite"
+                BorderThickness="1">
+
+                <!-- 1. Обработка по задаче 2 "Обновить курсы валют" -->
+                <MenuItem
+                    Header="_Обновить курсы валют"
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="ValutesRefresh_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Получить данные о курсах валют<LineBreak/>
+                            с сайта ЦРБ РФ в формате JSON
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/valutes.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+                <Separator Background="Purple"/>
+
+                <!-- 2. Обработка по задаче 2 "Валюты с курсом в диапазоне значений..." -->
+                <MenuItem
+                    Header="_Валюты с курсом в диапазоне значений..."
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="ValutesByRange_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Найти и отобразить валюты с курсом<LineBreak/>
+                            в заданном диапазоне значений
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/range.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+                <!-- 3. Обработка по задаче 2 "Курс валюты страны..." -->
+                <MenuItem
+                    Header="_Курс валюты страны..."
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="ValutesByCountry_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Найти и отобразить курс<LineBreak/>
+                            валюты заданной страны
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/country.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+                <!-- 4. Обработка по задаче 2 "Курс валюты по наименованию..." -->
+                <MenuItem
+                    Header="Курс валюты по _наименованию..."
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="ValutesByName_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Найти и отобразить<LineBreak/>
+                            курс заданной по<LineBreak/>
+                            наименованию валюты
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/currency.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+                <!-- 5. Обработка по задаче 2 "Курсы валют по убыванию" -->
+                <MenuItem
+                    Header="Курсы валют по _убыванию"
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="ValutesSortDescending_ClickAsync">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Сортировка курсов валют<LineBreak/>
+                            по убыванию значений
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/sortDesc.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+            </MenuItem>
+
+            <!-- 4. Кнопка "Справка" -->
+            <MenuItem
+                Header="_Справка"
+                Margin="5 2 0 2"
+                Padding="7 1"
+                Foreground="FloralWhite"
+                Background="Purple"
+                BorderBrush="FloralWhite"
+                BorderThickness="1">
+
+                <!-- сведения о приложении -->
+                <MenuItem
+                    Header="_О программе..."
+                    Padding="5"
+                    Foreground="Purple"
+                    Background="Lavender"
+                    Click="About_Click">
+
+                    <MenuItem.ToolTip>
+                        <TextBlock>
+                            Сведения о программе<LineBreak/>
+                            и разработчике
+                        </TextBlock>
+                    </MenuItem.ToolTip>
+
+                    <MenuItem.Icon>
+                        <Image Source="/Assets/about.png"/>
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+            </MenuItem>
+
+        </Menu>
+        <!-- endregion -->
+
+
+        <!--region панель инструментов -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            BorderBrush="DarkMagenta"
+            BorderThickness="1">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- основная панель инструментов -->
+                <ToolBarTray
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch"
+                    Background="Lavender">
+
+                    <!-- Набор инструментов для задачи 1 -->
+                    <ToolBar
+                        Margin="2 2 0 2"
+                        Background="FloralWhite"
+                        BorderBrush="DarkMagenta"
+                        BorderThickness="1">
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                        <!-- 1. Обработка по задаче 1 "Скачать файл" -->
+                        <Button
+                            Margin="5 2 0 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="FileDownload_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Загрузить файл с ресурса:<LineBreak/>
+                                    https://github.com/twbs/bootstrap/releases/download/v4.6.1/bootstrap-4.6.1-examples.zip
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/download.png"/>
+
+                        </Button>
+
+                        <!-- 2. Обработка по задаче 1 "Обработка страницы" -->
+                        <Button
+                            Margin="5 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="PageProcess_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Загрузить главную страницу<LineBreak/>
+                                    cайта NewtonSoft и определить<LineBreak/>
+                                    количество заданных символов<LineBreak/>
+                                    на загруженной странице
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/newtonsoft.png"/>
+
+                        </Button>
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                    </ToolBar>
+
+                    <!-- Набор инструментов для задачи 2 -->
+                    <ToolBar
+                        Margin="2 2 0 2"
+                        Background="FloralWhite"
+                        BorderBrush="DarkMagenta"
+                        BorderThickness="1">
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                        <!-- 1. Обработка по задаче 2 "Обновить курсы валют" -->
+                        <Button
+                            Margin="5 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="ValutesRefresh_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Получить данные о курсах валют<LineBreak/>
+                                    с сайта ЦРБ РФ в формате JSON
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/valutes.png"/>
+
+                        </Button>
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                        <!-- 2. Обработка по задаче 2 "Валюты с курсом в диапазоне значений..." -->
+                        <Button
+                            Margin="5 2 0 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="ValutesByRange_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Найти и отобразить валюты с курсом<LineBreak/>
+                                    в заданном диапазоне значений
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/range.png"/>
+
+                        </Button>
+
+                        <!-- 3. Обработка по задаче 2 "Курс валюты страны..." -->
+                        <Button
+                            Margin="5 2 0 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="ValutesByCountry_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Найти и отобразить курс<LineBreak/>
+                                    валюты заданной страны
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/country.png"/>
+
+                        </Button>
+
+                        <!-- 4. Обработка по задаче 2 "Курс валюты по наименованию..." -->
+                        <Button
+                            Margin="5 2 0 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="ValutesByName_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Найти и отобразить<LineBreak/>
+                                    курс заданной по<LineBreak/>
+                                    наименованию валюты
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/currency.png"/>
+
+                        </Button>
+
+                        <!-- 5. Обработка по задаче 2 "Курсы валют по убыванию" -->
+                        <Button
+                            Margin="5 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="ValutesSortDescending_ClickAsync">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Сортировка курсов валют<LineBreak/>
+                                    по убыванию значений
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/sortDesc.png"/>
+
+                        </Button>
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                    </ToolBar>
+
+                </ToolBarTray>
+
+                <!-- вспомогательная панель инструментов -->
+                <ToolBarTray
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Background="Lavender">
+
+                    <ToolBar
+                        Margin="2 2 0 2"
+                        Background="FloralWhite"
+                        BorderBrush="DarkMagenta"
+                        BorderThickness="1">
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                        <Button
+                            Margin="5 2 0 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="About_Click">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Сведения о программе<LineBreak/>
+                                    и разработчике
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/about.png"/>
+
+                        </Button>
+
+                        <Button
+                            Margin="5 2 5 2"
+                            Background="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Click="Exit_Click">
+
+                            <Button.ToolTip>
+                                <TextBlock>
+                                    Завершение работы<LineBreak/>
+                                    приложения
+                                </TextBlock>
+                            </Button.ToolTip>
+
+                            <Image Source="/Assets/close.png"/>
+
+                        </Button>
+
+                        <Separator
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            Margin="0 2"/>
+
+                    </ToolBar>
+
+                </ToolBarTray>
+
+            </Grid>
+
+        </Border>
+        <!-- endregion -->
+
+
+        <!--region рабочая область -->
+
+        <!-- набор вкладок с результатами обработок -->
+        <TabControl
+            Grid.Row="2"
+            Grid.Column="0"
+            Name="TbcMain"
+            Margin="5"
+            Padding="5"
+            Width="Auto"
+            HorizontalAlignment="Stretch"
+            Background="Snow"
+            BorderBrush="DarkMagenta"
+            BorderThickness="1">
+
+            <!-- Вкладка вывода результатов обработки задачи 1 -->
+            <TabItem
+                Name="TbiTask1">
+
+                <TabItem.Header>
+
+                    <Label
+                        Padding="7 2 7 3"
+                        Margin="3 7"
+                        FontSize="18"
+                        Background="Lavender"
+                        BorderBrush="DarkMagenta"
+                        BorderThickness="1">
+
+                        <Bold>Задача 1</Bold>
+
+                    </Label>
+
+                </TabItem.Header>
+
+                <TabItem.Content>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="7*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- информационная строка -->
+                        <Label
+                            Grid.Row="0"
+                            Margin="5"
+                            Padding="10"
+                            FontSize="18"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1">
+
+                            <Label.Content>
+
+                                <ScrollViewer>
+
+                                    <TextBlock
+                                        Name="TblInfo"
+                                        Margin="10 0"
+                                        TextWrapping="Wrap"/>
+
+                                </ScrollViewer>
+
+                            </Label.Content>
+
+                        </Label>
+
+                        <!-- строка вывода загрузки страницы -->
+                        <Label
+                            Grid.Row="1"
+                            Margin="5"
+                            Padding="10"
+                            FontSize="18"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1">
+
+                            <Label.Content>
+
+                                <ScrollViewer>
+
+                                    <TextBlock
+                                        Name="TblNewtonSoft"
+                                        Margin="10 0"
+                                        TextWrapping="Wrap"/>
+
+                                </ScrollViewer>
+
+                            </Label.Content>
+
+                        </Label>
+
+                    </Grid>
+
+                </TabItem.Content>
+
+            </TabItem>
+
+            <!-- Вкладка вывода результатов обработки задачи 2 -->
+            <TabItem
+                Name="TbiTask2">
+
+                <TabItem.Header>
+
+                    <Label
+                        Padding="7 2 7 3"
+                        Margin="3 7"
+                        FontSize="18"
+                        Background="Lavender"
+                        BorderBrush="DarkMagenta"
+                        BorderThickness="1">
+
+                        <Bold>Задача 2</Bold>
+
+                    </Label>
+
+                </TabItem.Header>
+
+                <TabItem.Content>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- информационная строка -->
+                        <Label
+                            Grid.Row="0"
+                            Margin="5"
+                            Padding="10"
+                            FontSize="18"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1">
+
+                            <Label.Content>
+
+                                <TextBlock
+                                    Name="TblInfo2"
+                                    Margin="10 0"
+                                    TextWrapping="Wrap">
+            
+                                    <Run Name="RunTask2Info1">Курсы валют на</Run>
+                                    <Run Name="RunTask2InfoBold" FontWeight="Bold">"сегодня"</Run>
+                                    <Run Name="RunTask2Info2">.</Run>
+
+                                </TextBlock>
+
+                            </Label.Content>
+
+                        </Label>
+
+                        <!-- таблица вывода курсов валют -->
+                        <DataGrid
+                            Grid.Row="1"
+                            Name="DgdCurrencies"
+                            Margin="5"
+                            FontFamily="Verdana"
+                            FontSize="16"
+                            AutoGenerateColumns="False"
+                            IsReadOnly="True"
+                            SelectionUnit="FullRow"
+                            AlternatingRowBackground="Lavender"
+                            BorderBrush="DarkMagenta"
+                            BorderThickness="1"
+                            HeadersVisibility="Column">
+
+                            <!-- Шаблоны столбцов таблицы "КУРСЫ_ВАЛЮТ" -->
+                            <DataGrid.Columns>
+
+                                <!-- шаблон столбца "ID" -->
+                                <DataGridTemplateColumn
+                                    Width="10*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            ID
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding Id}"
+                                                HorizontalAlignment="Left"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <!-- шаблон столбца "Название валюты" -->
+                                <DataGridTemplateColumn
+                                    Width="30*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            Название<LineBreak/>
+                                            валюты
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding Name}"
+                                                HorizontalAlignment="Left"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <!-- шаблон столбца "Цифровой код валюты" -->
+                                <DataGridTemplateColumn
+                                    Width="12*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            Цифровой<LineBreak/>
+                                            код валюты
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding NumCode}"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <!-- шаблон столбца "Буквенный код валюты" -->
+                                <DataGridTemplateColumn
+                                    Width="12*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            Буквенный<LineBreak/>
+                                            код валюты
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding CharCode}"
+                                                HorizontalAlignment="Left"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <!-- шаблон столбца "Номинал" -->
+                                <DataGridTemplateColumn
+                                    Width="12*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            Номинал
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding Nominal}"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"
+                                                ContentStringFormat="{}{0:n2}"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <!-- шаблон столбца "Текущий курс" -->
+                                <DataGridTemplateColumn
+                                    Width="12*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            Текущий<LineBreak/>
+                                            курс, руб.
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding Value}"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"
+                                                ContentStringFormat="{}{0:n4}"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+
+                                <!-- шаблон столбца "Предыдущий курс" -->
+                                <DataGridTemplateColumn
+                                    Width="12*">
+
+                                    <!-- шаблон заголовка столбца -->
+                                    <DataGridTemplateColumn.Header>
+
+                                        <TextBlock
+                                            Padding="5">
+                                            Предыдущий<LineBreak/>
+                                            курс, руб.
+                                        </TextBlock>
+
+                                    </DataGridTemplateColumn.Header>
+
+                                    <!-- шаблон ячеек столбца -->
+                                    <DataGridTemplateColumn.CellTemplate>
+
+                                        <DataTemplate>
+
+                                            <Label
+                                                Content="{Binding Previous}"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Padding="5"
+                                                ContentStringFormat="{}{0:n4}"/>
+
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                    </Grid>
+
+                </TabItem.Content>
+
+            </TabItem>
+
+        </TabControl>
+
+        <!--endregion -->
+
+
+        <!--region строка состояния -->
+        <StatusBar
+            Grid.Row="3"
+            Grid.Column="0"
+            Background="DarkMagenta">
+
+            <Label
+                Name="LblStatus"
+                Padding="2 0"
+                FontSize="18"
+                VerticalContentAlignment="Center"
+                Foreground="FloralWhite">
+
+                Готово
+
+            </Label>
+
+        </StatusBar>
+        <!-- endregion -->
+
+    </Grid>
+
+</Window>

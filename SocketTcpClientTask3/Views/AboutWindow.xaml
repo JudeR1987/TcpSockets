@@ -1,0 +1,131 @@
+﻿<Window x:Class="SocketTcpClientTask3.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SocketTcpClientTask3.Views"
+        mc:Ignorable="d"
+        
+        Title="Сведения о приложении и разработчике"
+        SizeToContent="Height"
+        Width="700"
+        FontFamily="Tahoma"
+        FontSize="16"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/network.png"
+        ShowInTaskbar="False"
+        Background="WhiteSmoke"
+        ResizeMode="NoResize">
+
+    <Grid
+        Background="DarkMagenta">
+
+        <StackPanel
+            Orientation="Vertical"
+            Margin="3"
+            Background="Lavender">
+
+            <ScrollViewer
+                Height="350">
+
+                <TextBlock
+                    Margin="10"
+                    Padding="10"
+                    FontFamily="Cascadia Code"
+                    FontSize="13"
+                    ScrollViewer.CanContentScroll="True"
+                    
+                    xml:space="preserve"
+                    
+                    SnapsToDevicePixels="True"
+                    TextWrapping="Wrap"
+                    Background="FloralWhite">
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+        <Bold>Задача 3.</Bold>
+
+    Разработайте два приложения в одном решении – клиент и сервер с
+    использованием сокетов TCP. Сервер получает и выполняет команды клиента.
+    Сервер – консольное приложение. Клиентское приложение разработайте в
+    технологии WPF. Обмен строками в приложении ведется в кодировке UTF-8.
+    Используйте кнопки, пункты меню. Предусмотрите возможность ввода
+    клиентских команд из командной строки приложения (текст-бокс для ввода
+    команд).
+
+        Команды сервера для разработки:
+    <Bold>date</Bold>      – возвращает дату и время на сервере;
+    <Bold>host_name</Bold> – возвращает имя компьютера, на котором работает сервер;
+    <Bold>pwd</Bold>       – возвращает полное имя папки App_Files приложения;
+    <Bold>list</Bold>      - клиент получает список имен файлов, хранящихся на сервере,
+                в папке App_Files (в папке исполняемого файла), имена файлов
+                разделены строкой “\n”;
+    <Bold>mul число1 число2</Bold> – сервер возвращает строку, содержащую два вещественных
+                числа и произведение этих чисел;
+    <Bold>sum число1 число2</Bold> – сервер возвращает строку, содержащую два вещественных
+                числа и сумму этих чисел;
+    <Bold>solve a b c</Bold> – сервер возвращает три числа a, b, c и вычисленные корни
+                квадратного уравнения 〖a∙x〗^2+b∙x+c=0, при отсутствии
+                действительных корней возвращать числа a, b, c и строку
+                “\nнет корней\n”;
+    <Bold>div число1 число2</Bold> – сервер возвращает строку, содержащую два вещественных
+            числа и частное этих чисел, если число2 == 0, возвращать
+            строку “\ndivide by zero\n;
+    <Bold>shutdown</Bold>  – завершение работы сервера;
+    <Bold>rename староеИмя новоеИмя</Bold> – переименование файла в папке App_Files на
+                сервере (в папке исполняемого файла), сервер возвращает
+                “Ok\n”, если файл был переименован на сервере или строку
+                "Not found\n" – если такого файла на сервере нет;
+    <Bold>upload имяФайла</Bold> – клиент выбирает файл и отправляет его на сервер,
+                сначала строка “Length ДлинаВБайтах\n”, затем байты файла,
+                далее строка “Ok\n”, сервер сохраняет принятый файл в папку
+                App_Files (в папке исполняемого файла);
+    <Bold>download имяФайла</Bold> – сервер передает запрошенный файл из папки App_Files
+                клиенту: строка "Ok ДлинаВБайтах\n" и затем передача байтов
+                файла, далее строка “Ok\n”, если такой файл есть не сервере
+                или строку "Not found\r\n" – если такого файла на сервере нет;
+    <Bold>delete имяФайла</Bold> – удаляет файл на сервере, в папке App_Files проекта
+                (в папке исполняемого файла), сервер возвращает “Ok\n”,
+                если файл был удален на сервере или строку "Not found\n" –
+                если такого файла на сервере нет.
+                    
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</TextBlock>
+
+            </ScrollViewer>
+
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Margin="10">
+
+                <Label
+                    Margin="10"
+                    Padding="10"
+                    BorderBrush="DarkMagenta"
+                    BorderThickness="2"
+                    Background="FloralWhite"
+                    VerticalAlignment="Center">
+                    Студент Макаров Е.С.
+                    Группа ПД221
+                    КА ШАГ, Донецк, 2023г.</Label>
+
+                <Button
+                    Margin="20 10 10 10"
+                    Width="120"
+                    Height="44"
+                    Content="OK"
+                    Background="DarkMagenta"
+                    Foreground="FloralWhite"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    IsDefault="True"
+                    MouseEnter="Button_MouseEnter"
+                    MouseLeave="Button_MouseLeave"
+                    Click="Close_Click"/>
+                
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+    
+</Window>
