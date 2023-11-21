@@ -95,11 +95,11 @@
 
                 <!-- выход из приложения -->
                 <MenuItem
+                    Name="MitClose"
                     Header="_Выход"
                     Padding="5"
                     Foreground="Purple"
-                    Background="Lavender"
-                    Click="Exit_Click">
+                    Background="Lavender">
 
                     <MenuItem.ToolTip>
                         <TextBlock>
@@ -570,11 +570,11 @@
                         </Button>
 
                         <Button
+                            Name="BtnClose"
                             Margin="5 2 5 2"
                             Background="Lavender"
                             BorderBrush="DarkMagenta"
-                            BorderThickness="1"
-                            Click="Exit_Click">
+                            BorderThickness="1">
 
                             <Button.ToolTip>
                                 <TextBlock>

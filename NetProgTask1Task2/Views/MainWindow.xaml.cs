@@ -1,4 +1,5 @@
 ﻿using NetProgTask1Task2.Controllers;
+using NetProgTask1Task2.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,11 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
+        // назначить на кнопку созданную нами команду, передавать команде
+        // методы для проверки возможности выполнения команды и полезную работу команды
+        BtnClose.Command = new ExampleCommand(CommandExecute, CanCommandExecute);
+        MitClose.Command = new ExampleCommand(CommandExecute, CanCommandExecute);
+
         // получить контроллеры
         _task1Controller = task1Controller;
         _task2Controller = task2Controller;
@@ -41,8 +47,13 @@ public partial class MainWindow : Window
 
 
     // завершение работы приложения
-    private void Exit_Click(object sender, RoutedEventArgs e) =>
+    //private void Exit_Click(object sender, RoutedEventArgs e) =>
+    //    Application.Current.Shutdown();
+    private void CommandExecute(object parametr) =>
         Application.Current.Shutdown();
+
+    // реализация проверки возможности исполнения команды
+    private bool CanCommandExecute(object parametr) => true;
 
 
     // вывод сведений о приложении и разработчике
